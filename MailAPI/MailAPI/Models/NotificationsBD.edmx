@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NotificacionesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ESTADO">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MENSAJE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmailOrigen" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailDestino" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Tema" Type="varchar" MaxLength="50" />
+          <Property Name="Mensaje" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Estado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MENSAJENUEVO">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailOrigen" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailDestino" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Tema" Type="varchar" MaxLength="50" />
+          <Property Name="Mensaje" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Intentos" Type="int" Nullable="false" />
+          <Property Name="Prioridad" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_MENSAJE_ESTADO">
+          <End Role="ESTADO" Type="Self.ESTADO" Multiplicity="1" />
+          <End Role="MENSAJE" Type="Self.MENSAJE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTADO">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MENSAJE">
+              <PropertyRef Name="Estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="INCREMENTARINTENTOS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INSERTARMENSAJENUEVO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmailOrigen" Type="varchar" Mode="In" />
+          <Parameter Name="EmailDestino" Type="varchar" Mode="In" />
+          <Parameter Name="Tema" Type="varchar" Mode="In" />
+          <Parameter Name="Mensaje" Type="varchar" Mode="In" />
+          <Parameter Name="Intentos" Type="int" Mode="In" />
+          <Parameter Name="Prioridad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MOVERMENSAJE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Estado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OBTENERMESAJESNUEVOS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="NotificacionesModelStoreContainer">
+          <EntitySet Name="ESTADO" EntityType="Self.ESTADO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MENSAJE" EntityType="Self.MENSAJE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MENSAJENUEVO" EntityType="Self.MENSAJENUEVO" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MENSAJE_ESTADO" Association="Self.FK_MENSAJE_ESTADO">
+            <End Role="ESTADO" EntitySet="ESTADO" />
+            <End Role="MENSAJE" EntitySet="MENSAJE" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NotificacionesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ESTADO">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Estado1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="MENSAJE" Relationship="Self.FK_MENSAJE_ESTADO" FromRole="ESTADO" ToRole="MENSAJE" />
+        </EntityType>
+        <EntityType Name="MENSAJE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmailOrigen" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailDestino" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Tema" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Mensaje1" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ESTADO1" Relationship="Self.FK_MENSAJE_ESTADO" FromRole="MENSAJE" ToRole="ESTADO" />
+        </EntityType>
+        <EntityType Name="MENSAJENUEVO">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailOrigen" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailDestino" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Tema" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Mensaje" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Intentos" Type="Int32" Nullable="false" />
+          <Property Name="Prioridad" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_MENSAJE_ESTADO">
+          <End Role="ESTADO" Type="Self.ESTADO" Multiplicity="1" />
+          <End Role="MENSAJE" Type="Self.MENSAJE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTADO">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MENSAJE">
+              <PropertyRef Name="Estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NotificacionesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ESTADO" EntityType="Self.ESTADO" />
+          <EntitySet Name="MENSAJE" EntityType="Self.MENSAJE" />
+          <EntitySet Name="MENSAJENUEVO" EntityType="Self.MENSAJENUEVO" />
+          <AssociationSet Name="FK_MENSAJE_ESTADO" Association="Self.FK_MENSAJE_ESTADO">
+            <End Role="ESTADO" EntitySet="ESTADO" />
+            <End Role="MENSAJE" EntitySet="MENSAJE" />
+          </AssociationSet>
+          <FunctionImport Name="NewMessage">
+            <Parameter Name="EmailOrigen" Mode="In" Type="String" />
+            <Parameter Name="EmailDestino" Mode="In" Type="String" />
+            <Parameter Name="Tema" Mode="In" Type="String" />
+            <Parameter Name="Mensaje" Mode="In" Type="String" />
+            <Parameter Name="Intentos" Mode="In" Type="Int32" />
+            <Parameter Name="Prioridad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MoveMessage">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Estado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ObteinNewMessage" />
+          <FunctionImport Name="IncrementarIntentos">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NotificacionesModelStoreContainer" CdmEntityContainer="NotificacionesEntities">
+          <EntitySetMapping Name="ESTADO">
+            <EntityTypeMapping TypeName="NotificacionesModel.ESTADO">
+              <MappingFragment StoreEntitySet="ESTADO">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Estado1" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MENSAJE">
+            <EntityTypeMapping TypeName="NotificacionesModel.MENSAJE">
+              <MappingFragment StoreEntitySet="MENSAJE">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmailOrigen" ColumnName="EmailOrigen" />
+                <ScalarProperty Name="EmailDestino" ColumnName="EmailDestino" />
+                <ScalarProperty Name="Tema" ColumnName="Tema" />
+                <ScalarProperty Name="Mensaje1" ColumnName="Mensaje" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MENSAJENUEVO">
+            <EntityTypeMapping TypeName="NotificacionesModel.MENSAJENUEVO">
+              <MappingFragment StoreEntitySet="MENSAJENUEVO">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmailOrigen" ColumnName="EmailOrigen" />
+                <ScalarProperty Name="EmailDestino" ColumnName="EmailDestino" />
+                <ScalarProperty Name="Tema" ColumnName="Tema" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="Intentos" ColumnName="Intentos" />
+                <ScalarProperty Name="Prioridad" ColumnName="Prioridad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="NewMessage" FunctionName="NotificacionesModel.Store.INSERTARMENSAJENUEVO" />
+          <FunctionImportMapping FunctionImportName="MoveMessage" FunctionName="NotificacionesModel.Store.MOVERMENSAJE" />
+          <FunctionImportMapping FunctionImportName="ObteinNewMessage" FunctionName="NotificacionesModel.Store.OBTENERMESAJESNUEVOS" />
+          <FunctionImportMapping FunctionImportName="IncrementarIntentos" FunctionName="NotificacionesModel.Store.INCREMENTARINTENTOS" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
